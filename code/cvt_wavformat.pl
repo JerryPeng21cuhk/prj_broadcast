@@ -1,4 +1,9 @@
+#!/usr/bin/env perl
+
+# Author: Jerry Peng 2018
+
 use utf8;
+
 if (@ARGV != 1) {
   print "usage: script wav.scp; output wav_cvt.scp to stdout.\n"
 }

@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Author: Jerry Peng 2018
-# In this script, we check the format of wav files inside a given directory
+# In this script, 
+#  1) we check the format of wav files inside a given directory
+#  2)    convert the format to satisfy kaldi's requirement.
 
 ipath2dir="/lan/ibdata/SPEECH_DATABASE/RTHK_raw_data/Sound_Archives/2017"
 
