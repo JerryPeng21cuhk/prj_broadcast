@@ -64,22 +64,22 @@ fi
 
 
 if [ $stage -le 1 ]; then
-  # sid/train_diag_ubm.sh --nj 10 --cmd "$train_cmd" --delta-window 2 \
-  #   data/musan_noise 32 exp/diag_ubm_noise
-  # sid/train_diag_ubm.sh --nj 20 --cmd "$train_cmd" --delta-window 2 \
-  #   data/musan_speech 32 exp/diag_ubm_speech
-  # sid/train_diag_ubm.sh --nj 20 --cmd "$train_cmd" --delta-window 2 \
-  #   data/musan_music 32  exp/diag_ubm_music
+  sid/train_diag_ubm.sh --nj 10 --cmd "$train_cmd" --delta-window 2 \
+    data/musan_noise 32 exp/diag_ubm_noise
+  sid/train_diag_ubm.sh --nj 20 --cmd "$train_cmd" --delta-window 2 \
+    data/musan_speech 32 exp/diag_ubm_speech
+  sid/train_diag_ubm.sh --nj 20 --cmd "$train_cmd" --delta-window 2 \
+    data/musan_music 32  exp/diag_ubm_music
 
-  # sid/train_full_ubm.sh --nj 20 --cmd "$train_cmd" \
-  #   --remove-low-count-gaussians false data/musan_noise \
-  #   exp/diag_ubm_noise exp/full_ubm_noise
-  # sid/train_full_ubm.sh --nj 20 --cmd "$train_cmd" \
-  #   --remove-low-count-gaussians false data/musan_speech \
-  #   exp/diag_ubm_speech exp/full_ubm_speech
-  # sid/train_full_ubm.sh --nj 20 --cmd "$train_cmd" \
-  #   --remove-low-count-gaussians false data/musan_music \
-  #   exp/diag_ubm_music exp/full_ubm_music
+  sid/train_full_ubm.sh --nj 20 --cmd "$train_cmd" \
+    --remove-low-count-gaussians false data/musan_noise \
+    exp/diag_ubm_noise exp/full_ubm_noise
+  sid/train_full_ubm.sh --nj 20 --cmd "$train_cmd" \
+    --remove-low-count-gaussians false data/musan_speech \
+    exp/diag_ubm_speech exp/full_ubm_speech
+  sid/train_full_ubm.sh --nj 20 --cmd "$train_cmd" \
+    --remove-low-count-gaussians false data/musan_music \
+    exp/diag_ubm_music exp/full_ubm_music
 
 
   # first we select a small subset from hkbn to check if this approach works
@@ -91,12 +91,11 @@ if [ $stage -le 1 ]; then
     data/hkbn_2017part10 exp/full_ubm_noise exp/full_ubm_speech/ \
     exp/full_ubm_music/ exp/vad_gmm_hkbn2017part10 exp/vad_gmm_hkbn2017part10
 
-
-
 fi
 
 # show results
 if [ $stage -le 2 ]; then
+  python3 local/view_prob_curve.py
 
 
 fi

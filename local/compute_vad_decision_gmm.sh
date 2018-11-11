@@ -111,7 +111,7 @@ if [ $stage -le 0 ]; then
     $cmd JOB=1:$nj ${log_dir}/log/get_${gmm_name}_logprob.JOB.log \
       fgmm-global-get-frame-likes --average=false \
       "--gselect=ark,s,cs:gunzip -c ${vad_dir}/${gmm_name}_gselect.JOB.gz|" ${gmm_dir}/final.ubm \
-      "$feats" ark:${vad_dir}/${gmm_name}_logprob.JOB.ark || exit 1;
+      "$feats" ark,scp:${vad_dir}/${gmm_name}_logprob.JOB.ark,${vad_dir}/${gmm_name}_logprob.JOB.scp || exit 1;
   done
 
   echo "$0: computing VAD decisions from frame likelihoods"
@@ -158,6 +158,18 @@ if $cleanup ; then
     rm ${vad_dir}/${gmm_name}_gselect.*.gz
     rm ${vad_dir}/${gmm_name}_logprob.*.ark
   done
+else
+  for gmm_dir in "${gmm_dirs[@]}";
+  do
+    gmm_name=`basename $gmm_dir`
+    # create ${vad_dir}/${gmm_name}_logprob.scp to draw curves
+    for ((n=1; n<=nj; n++)); do
+      cat ${vad_dir}/${gmm_name}_logprob.$n.scp || exit 1;
+    done > ${vad_dir}/${gmm_name}_logprob.scp
+    
+    rm ${vad_dir}/${gmm_name}_logprob.*.scp  
+  done
+  
 fi
 
 exit 0;
