@@ -9,7 +9,7 @@
 #  1) do VAD on hkbn_2017 and MUSAN
 #  2) train three GMMs on MUSAN, namely, music_gmm, speech_gmm and noise_gmm
 #  3) decode hkbn_2017
-#  4) draw the VAD curve and speech spectromgram for investigation
+#  4) draw the prob curve and speech spectromgram for investigation
 #  5) to be continued.
 
 
