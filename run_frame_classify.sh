@@ -2,7 +2,7 @@
 
 # Author: Jerry Peng 2018
 # In this script, 
-#  two corpora is used:
+#  two corpora are used:
 #     MUSAN (public) -- a corpus comprises of three part: music, speech and noise
 #     hkbn_2017 (private) -- a corpus of broadcast with only raw audio now
 #  steps:
@@ -29,13 +29,13 @@ stage=
 
 # data preparation
 if [ $stage -le 0 ]; then
-  # local/make_musan.sh /home/jerry/Downloads/musan data
+  local/make_musan.sh /home/jerry/Downloads/musan data
   # 42.6h music, 6.2h noise, 60.4h speech
-
 
   local/check_and_format_data.sh /lan/ibdata/SPEECH_DATABASE/RTHK_raw_data/Sound_Archives/2017 data/hkbn_2017
   # 1144h
 
+  # create fake utt2spk and spk2utt
   paste -d' ' <(cut -d' ' -f1 data/hkbn_2017/wav.scp) \
     <(cut -d' ' -f1 data/hkbn_2017/wav.scp) \
     > data/hkbn_2017/spk2utt
@@ -109,7 +109,7 @@ if [ $stage -le 2 ]; then
 
 fi
 
-# Beside this, I also manual label a wav file
+# Beside this, I also manual label a wav file: 20170217-noon
 
 # now, I need to discuss with professor for the next step
 # my idea is to quantize and accumulate the probs over a segment with 2-second
