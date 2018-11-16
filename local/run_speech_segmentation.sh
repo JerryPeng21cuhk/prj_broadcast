@@ -2,8 +2,15 @@
 
 # Author: Jerry Peng 2018
 # In this script, 
-#  1) we do VAD to select speech cuts
-#  2) draw the VAD curve and speech spectromgram
+#  two corpora is used:
+#     MUSAN (public) -- a corpus comprises of three part: music, speech and noise
+#     hkbn_2017 (private) -- a corpus of broadcast with only raw audio now
+#  steps:
+#  1) do VAD on hkbn_2017 and MUSAN
+#  2) train three GMMs on MUSAN, namely, music_gmm, speech_gmm and noise_gmm
+#  3) decode hkbn_2017
+#  4) draw the VAD curve and speech spectromgram for investigation
+#  5) to be continued.
 
 
 . ./cmd.sh
@@ -12,6 +19,7 @@
 set -e
 mfccdir=`pwd`/mfcc
 vaddir=`pwd`/mfcc
+figdir=`pwd`/fig
 stage=
 
 
@@ -33,17 +41,17 @@ if [ $stage -le 0 ]; then
     > data/hkbn_2017/spk2utt
   utils/spk2utt_to_utt2spk.pl data/hkbn_2017/spk2utt > data/hkbn_2017/utt2spk
 
-  # steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 30 --cmd "$train_cmd" \
-  #   data/musan_speech exp/make_mfcc $mfccdir
+  steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 30 --cmd "$train_cmd" \
+    data/musan_speech exp/make_mfcc $mfccdir
 
-  # steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 30 --cmd "$train_cmd" \
-  #   data/musan_music exp/make_mfcc $mfccdir
+  steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 30 --cmd "$train_cmd" \
+    data/musan_music exp/make_mfcc $mfccdir
 
-  # steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 5 --cmd "$train_cmd" \
-  #   data/musan_noise exp/make_mfcc $mfccdir
+  steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 5 --cmd "$train_cmd" \
+    data/musan_noise exp/make_mfcc $mfccdir
 
-  # steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 30 --cmd "$train_cmd" \
-  #   data/hkbn_2017 exp/make_mfcc $mfccdir
+  steps/make_mfcc.sh --mfcc-config conf/mfcc.conf --nj 30 --cmd "$train_cmd" \
+    data/hkbn_2017 exp/make_mfcc $mfccdir
 
   utils/fix_data_dir.sh data/musan_speech
   utils/fix_data_dir.sh data/musan_music
@@ -95,7 +103,15 @@ fi
 
 # show results
 if [ $stage -le 2 ]; then
-  python3 local/view_prob_curve.py
-
+  mkdir -p $figdir
+  wavid="20170217-noon"
+  python3 local/view_prob_curve.py "$wavid" --seg "0-inf" --to-txt $figdir/$wavid.txt
 
 fi
+
+# Beside this, I also manual label a wav file
+
+# now, I need to discuss with professor for the next step
+# my idea is to quantize and accumulate the probs over a segment with 2-second
+# This create 3 vector. One vector for each prob curve.
+# Then, train an svm to do classifition.

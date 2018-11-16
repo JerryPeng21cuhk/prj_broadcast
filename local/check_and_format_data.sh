@@ -3,7 +3,7 @@
 # Author: Jerry Peng 2018
 # In this script, 
 #  1) we check the format of wav files inside a given directory
-#  2)    convert the format to satisfy kaldi's requirement.
+#  2)    create wav.scp. It will be used in kaldi.
 
 
 
